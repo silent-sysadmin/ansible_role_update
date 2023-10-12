@@ -1,0 +1,31 @@
+---
+# tasks file for update
+- name: Update enterprise linux hosts
+  when: 
+    - ansible_facts["os_family"] == "RedHat"
+  become: true
+  block:
+    - name: EL | Update packages to latest versions
+      register: elupdate
+      ansible.builtin.dnf: name='*' state='latest'
+    
+    - name: EL | Reboot host to apply all updates
+      when:
+        - elupdate['changed'] is true
+        - update_reboot is true
+      ansible.builtin.reboot:
+
+- name: Update debian linux hosts
+  when: 
+    - ansible_facts["os_family"] == "Debian"
+  become: true
+  block:
+    - name: DEBIAN | Update packages to latest versions
+      register: debupdate
+      ansible.builtin.apt: name='*' state='latest'
+    
+    - name: DEBIAN | Reboot host to apply all updates
+      when:
+        - debupdate['changed'] is true
+        - update_reboot is true
+      ansible.builtin.reboot:
