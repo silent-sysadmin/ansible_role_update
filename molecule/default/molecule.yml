@@ -1,0 +1,14 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+platforms:
+  - name: instance
+    box: generic/rocky8
+    cpus: 1
+    memory: 512
+provisioner:
+  name: ansible
+verifier:
+  name: ansible
